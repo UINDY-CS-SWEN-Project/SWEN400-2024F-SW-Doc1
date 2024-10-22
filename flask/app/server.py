@@ -1,98 +1,40 @@
-#!/usr/bin/env python
 import os
-from os.path import join, dirname
-from flask import Flask, render_template, redirect, url_for, request, jsonify
-#best use mysql-connector-python for mysql 8.0
-import mysql.connector 
+import pickle
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-
 app = Flask(__name__)
-
 CORS(app)
 
-def get_db_connection():
-    return mysql.connector.connect(
-        user='root',
-        password='root123!',
-        host='db',
-        database='my_test_db'
-    )
+# Path to the pickle file
+PICKLE_FILE = 'users.pkl'
 
+# Load existing users from the pickle file
+def load_users():
+    if os.path.exists(PICKLE_FILE):
+        with open(PICKLE_FILE, 'rb') as f:
+            return pickle.load(f)
+    return {}
 
-@app.route('/')
-def hello():
-    return "Flask - Hello World!!"
+# Save users to the pickle file
+def save_users(users):
+    with open(PICKLE_FILE, 'wb') as f:
+        pickle.dump(users, f)
 
-@app.route('/ex', methods=['POST', 'GET'])
-def ex():
-    user = ""
-    if request.method == 'POST':
-        if 'nm' in request.form:
-            user = request.form('nm')
-        return "Flask parameter: " + user
-    else:
-        if 'nm' in request.args:
-            user = request.args.get('nm')
-        return "Flask parameter: " + user
-    
-@app.route('/db', methods=['POST', 'GET'])
-def db():
-    cnx = mysql.connector.connect(user='root', password='root123!',
-                              host='db',
-                              database='my_test_db')
-    db_str = ""
-    if cnx and cnx.is_connected():
-        with cnx.cursor() as cursor:
-            result = cursor.execute("SELECT * from test_data")
-            rows = cursor.fetchall()
-            for rows in rows:
-                print(rows)
-                db_str = db_str + " NAME: " + rows[0] + "TITLE: " + rows[1]
-        cnx.close()
-    else:
-        return "Cannot connect"
-    return "Good MySQL connections!!! " + db_str
-
-@app.route('/login', methods=['POST'])
-def login():
+@app.route('/register', methods=['POST'])
+def register():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
 
-    cnx = mysql.connector.connect(user='root', password='root123!',
-                                  host='db',
-                                  database='my_test_db')
-    if cnx and cnx.is_connected():
-        with cnx.cursor() as cursor:
-            cursor.execute("SELECT password FROM users WHERE username = %s", (username,))
-            result = cursor.fetchone()
-            if result and result[0] == password:
-                return jsonify(success=True)
-            else:
-                return jsonify(success=False)
-        cnx.close()
-    else:
-        return jsonify(success=False, error="Cannot connect to database")
+    users = load_users()
 
-@app.route('/documents', methods=['GET'])
-def search_documents():
-    search_query = request.args.get('q', '')  # Get the search query from the React frontend
-    cnx = get_db_connection()
-    db_str = []
+    if username in users:
+        return jsonify(success=False, error="User already exists")
 
-    if cnx and cnx.is_connected():
-        with cnx.cursor() as cursor:
-            # Use a wildcard search for document name
-            query = "SELECT name FROM documents WHERE name LIKE %s"
-            cursor.execute(query, ('%' + search_query + '%',))
-            rows = cursor.fetchall()
-            db_str = [row[0] for row in rows]  # Collect all document names
-        cnx.close()
-    
-    return jsonify(documents=db_str)  # Return the search results as JSON
-
+    users[username] = password
+    save_users(users)
+    return jsonify(success=True)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=os.environ.get("FLASK_SERVER_PORT", 8080), debug=True)
-
+    app.run(host='0.0.0.0', port=8080, debug=True)
