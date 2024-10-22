@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import Products from './pages/Products'
 import Login from './pages/Login'
 import DocumentSearch from './pages/DocumentSearch'
+import Signup from './pages/Signup'
 import PrivateRoutes from './utils/PrivateRoutes'
 import { useEffect } from 'react';
 
@@ -24,6 +25,7 @@ function App() {
             </Route>
             <Route element={<Home/>} path="/"/>
             <Route element={<Login/>} path="/login"/>
+            <Route element={<Signup/>} path="/signup"/>
             <Route element={<DocumentSearch/>} path="/documentsearch"/>
           </Routes>
       </Router>
