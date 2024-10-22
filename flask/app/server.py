@@ -19,7 +19,6 @@ def get_db_connection():
         database='my_test_db'
     )
 
-
 @app.route('/')
 def hello():
     return "Flask - Hello World!!"
