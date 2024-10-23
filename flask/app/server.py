@@ -3,9 +3,6 @@ import os
 from os.path import join, dirname
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 #best use mysql-connector-python for mysql 8.0
-import mysql.connector 
-from flask_cors import CORS
-
 
 app = Flask(__name__)
 
@@ -15,7 +12,7 @@ def get_db_connection():
     return mysql.connector.connect(
         user='root',
         password='root123!',
-        host='db',
+        host='localhost:8080',
         database='my_test_db'
     )
 
