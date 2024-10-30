@@ -6,63 +6,64 @@ services:
       - ./react/client-app/src:/app/client-app/src
     ports: 
       - "3000:3000"
-    depends_on:
-      - "backend"
-    links:
-      - backend
+#     depends_on:
+#       - "backend"
+#     links:
+#       - backend
 
-  web:
-    build: "./nginx"
-    volumes:
-      - ./nginx/nginx.conf:/tmp/nginx.conf
-      - ./nginx/shtml:/var/www/html/shtml
-    environment: 
-      - FLASK_SERVER_ADDR=backend:9091
-      - REACT_NODE_ADDR=client:3000
-    container_name: nginx_web
-    ports:
-      - 8080:80
-    depends_on:
-      - backend
-      - client
-    links:
-      - backend
-      - client
+  # web:
+  #   build: "./nginx"
+  #   volumes:
+  #     - ./nginx/nginx.conf:/tmp/nginx.conf
+  #     - ./nginx/shtml:/var/www/html/shtml
+  #   environment: 
+  #     - FLASK_SERVER_ADDR=backend:9091
+  #     - REACT_NODE_ADDR=client:3000
+  #   container_name: nginx_web
+  #   ports:
+  #     - 8080:80
+#     depends_on:
+#       - backend
+#       - client
+#     links:
+#       - backend
+#       - client
 
-  backend:
-    build: "./flask"
-    # flask requires SIGINT to stop gracefully
-    # (default stop signal from Compose is SIGTERM)
-    stop_signal: SIGINT
-    command: python server.py run -h 0.0.0.0
-    container_name: backend_flask
-    environment:
-      - FLASK_SERVER_PORT=9091
-    volumes:
-      - ./flask/app:/src
-    ports:
-      - 9091:9091
-    depends_on:
-      - db
-    # use links not networking, it will not resolve the db domain name in the code
-    links:
-      - db
+#   backend:
+#     build: "./flask"
+#     # flask requires SIGINT to stop gracefully
+#     # (default stop signal from Compose is SIGTERM)
+#     stop_signal: SIGINT
+#     command: python server.py run -h 0.0.0.0
+#     container_name: backend_flask
+#     environment:
+#       - FLASK_SERVER_PORT=9091
+#     volumes:
+#       - ./flask/app:/src
+#     ports:
+#       - 9091:9091
+#     depends_on:
+#       - db
+#     # use links not networking, it will not resolve the db domain name in the code
+#     links:
+#       - db
   
-  db:
-    build: "./mysql"
-    container_name: mysql8-db
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root123!
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: my_test_db
-    ports:
-      - '32000:3306'
-    volumes:
-      # only can use this volume method to mount the data folder in order to avoid permission issue
-      - mysql_data:/var/lib/mysql
+#   db:
+#     build: "./mysql"
+#     container_name: mysql8-db
+#     restart: always
+#     environment:
+#       MYSQL_ROOT_PASSWORD: root123!
+#       MYSQL_USER: user
+#       MYSQL_PASSWORD: password
+#       MYSQL_DATABASE: my_test_db
+#     ports:
+#       - '32000:3306'
+#     volumes:
+#       # only can use this volume method to mount the data folder in order to avoid permission issue
+#       - mysql_data:/var/lib/mysql
 
-volumes:
-    mysql_data:
-      driver: local
+# volumes:
+#     mysql_data:
+#       driver: local
+
