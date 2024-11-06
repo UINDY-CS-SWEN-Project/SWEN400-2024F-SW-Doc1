@@ -11,6 +11,9 @@ import Signup from './pages/Register';
 import PrivateRoutes from './utils/PrivateRoutes';
 import { useAuth } from './contexts/authContext';
 import { Navigate } from 'react-router-dom';
+import Template from './pages/Template';
+import TeamsPage from './pages/TeamsPage';
+// import CssBaseline from '@mui/material';
 
 function App() {
   return (
@@ -37,6 +40,8 @@ function AppRoutes() {
             <Route path="/home" element={<Home />} />
             <Route path="/main" element={<Home />} />
             <Route path="/documentsearch" element={<DocumentSearch />} />
+            <Route path="/teams" element={<TeamsPage />} />
+            <Route path="/template" element={<Template />} />
           </Route>
 
           <Route 

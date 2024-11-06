@@ -1,90 +1,118 @@
 import React, { useState } from "react";
-import ReactJson from 'react-json-view';
-import Switch from "react-switch";
-import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
-function App() {
+function Template() {
   const [template, setTemplate] = useState([]);
   const [elementLabel, setElementLabel] = useState('');
   const [isWritable, setIsWritable] = useState(true);
+  const [jsonValue, setJsonValue] = useState(JSON.stringify(template, null, 2));
+  const navigate = useNavigate();
 
   const handleAddElement = () => {
-    setTemplate([...template, { label: elementLabel, writable: isWritable }]);
-    setElementLabel(''); // Reset input field
+    const newTemplate = [...template, { label: elementLabel, writable: isWritable }];
+    setTemplate(newTemplate);
+    setElementLabel(''); 
+    setJsonValue(JSON.stringify(newTemplate, null, 2));
   };
 
   const handleRemoveElement = (index) => {
-    setTemplate(template.filter((_, i) => i !== index));
+    const newTemplate = template.filter((_, i) => i !== index);
+    setTemplate(newTemplate);
+    setJsonValue(JSON.stringify(newTemplate, null, 2));
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
+    console.log("Template saved:", template);
+  };
+
+  const handleEditorChange = (event) => {
+    const value = event.target.value;
     try {
-      const response = await axios.post('/api/templates', { template });
-      console.log("Template saved:", response.data);
-      alert("Template saved successfully!");
+      const parsedValue = JSON.parse(value);
+      setTemplate(parsedValue);
     } catch (error) {
-      console.error("Error saving template:", error);
-      alert("Failed to save template. Please try again.");
+      // Handle JSON parsing errors if necessary
     }
+    setJsonValue(value);
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto", backgroundColor: "#e7f1fc", borderRadius: "10px" }}>
-      <h2>Template Configuration Page</h2>
-      
+    <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto", backgroundColor: "#e7f1fc", borderRadius: "10px" }}>
+      <h1>Template Configuration Page</h1>
+
       {/* JSON Editor */}
-      <div style={{ marginBottom: "20px", padding: "10px", backgroundColor: "#d3eaf9", borderRadius: "5px" }}>
-        <h3>JSON Editor</h3>
-        <ReactJson src={template} theme="monokai" />
+      <div style={{ marginBottom: "20px", padding: "10px", backgroundColor: "#d3eaf9" }}>
+        <h2>JSON Editor</h2>
+        <textarea
+          style={{ width: "100%", height: "200px" }}
+          value={jsonValue}
+          onChange={handleEditorChange}
+        />
       </div>
-      
+
       {/* Add Element Section */}
-      <div style={{ marginBottom: "20px", padding: "10px", border: "1px solid black" }}>
-        <label htmlFor="elementLabel">Add Element:</label>
+      <div style={{ marginBottom: "20px", padding: "10px", backgroundColor: "#ffffff", border: "1px solid #ddd", borderRadius: "5px" }}>
         <input
-          id="elementLabel"
           type="text"
+          placeholder="Enter element label"
           value={elementLabel}
           onChange={(e) => setElementLabel(e.target.value)}
-          placeholder="Enter element label"
-          style={{ marginLeft: "10px" }}
+          style={{ width: "100%", padding: "8px", marginBottom: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
         />
-        <br /><br />
 
-        <label htmlFor="isWritable">Writable:</label>
-        <Switch
-          id="isWritable"
-          onChange={setIsWritable}
-          checked={isWritable}
-          onColor="#86d3ff"
-          offColor="#fefefe"
-          checkedIcon={false}
-          uncheckedIcon={false}
-          height={20}
-          width={40}
-        />
-        <span style={{ marginLeft: "10px" }}>{isWritable ? "Writable" : "Read-Only"}</span>
+        <label style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <span>Writable:</span>
+          <input
+            type="checkbox"
+            checked={isWritable}
+            onChange={(e) => setIsWritable(e.target.checked)}
+          />
+          <span>{isWritable ? "Writable" : "Read-Only"}</span>
+        </label>
       </div>
-      
+
       {/* Add and Remove Buttons */}
-      <button onClick={handleAddElement} style={{ marginRight: "10px", padding: "5px 10px", backgroundColor: "#4CAF50", color: "white" }}>
+      <button
+        onClick={handleAddElement}
+        style={{ padding: "10px 15px", backgroundColor: "green", color: "#fff", borderRadius: "5px", border: "none", cursor: "pointer", marginRight: "10px" }}
+      >
         Add Element
       </button>
-      {template.length > 0 && template.map((element, index) => (
-        <div key={index} style={{ marginTop: "10px" }}>
-          <span>{element.label} - {element.writable ? "Writable" : "Read-Only"}</span>
-          <button onClick={() => handleRemoveElement(index)} style={{ marginLeft: "10px", padding: "3px 7px", backgroundColor: "#f44336", color: "white" }}>
-            Remove
-          </button>
+
+      {/* Display the List of Elements */}
+      {template.length > 0 && (
+        <div style={{ marginTop: "20px" }}>
+          {template.map((element, index) => (
+            <div key={index} style={{ padding: "10px", marginBottom: "10px", backgroundColor: "#f5f5f5", borderRadius: "5px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span>{element.label} - {element.writable ? "Writable" : "Read-Only"}</span>
+              <button
+                onClick={() => handleRemoveElement(index)}
+                style={{ padding: "5px 10px", backgroundColor: "red", color: "#fff", borderRadius: "5px", border: "none", cursor: "pointer" }}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
         </div>
-      ))}
-      
+      )}
+
       {/* Save Button */}
-      <button onClick={handleSave} style={{ display: "block", marginTop: "20px", padding: "10px 20px", backgroundColor: "#2196F3", color: "white" }}>
+      <button
+        onClick={handleSave}
+        style={{ padding: "10px 15px", backgroundColor: "blue", color: "#fff", borderRadius: "5px", border: "none", cursor: "pointer", marginTop: "20px" }}
+      >
         Save
+      </button>
+
+      {/* Home Button */}
+      <button
+        onClick={() => navigate("/")}
+        style={{ padding: "10px 15px", backgroundColor: "#555", color: "#fff", borderRadius: "5px", border: "none", cursor: "pointer", marginTop: "10px", display: "block" }}
+      >
+        Home
       </button>
     </div>
   );
 }
 
-export default App;
+export default Template;

@@ -8,7 +8,6 @@ function Signup() {
   const auth = getAuth();
   const { currentUser } = useAuth();
   
-  // Form state
   const [formData, setFormData] = useState({
     email: '',
     password: ''
