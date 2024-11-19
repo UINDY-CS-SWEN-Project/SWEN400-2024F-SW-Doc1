@@ -39,6 +39,12 @@ const Home = () => {
         >
           Go to Template
         </button>
+        <button
+          onClick={() => navigate('/edit')}
+          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded"
+        >
+          Go to Document Editor
+        </button>
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ import { useAuth } from './contexts/authContext';
 import { Navigate } from 'react-router-dom';
 import Template from './pages/Template';
 import TeamsPage from './pages/TeamsPage';
-// import CssBaseline from '@mui/material';
+import Editor from './pages/Editor';
 
 function App() {
   return (
@@ -41,7 +41,7 @@ function AppRoutes() {
             <Route path="/main" element={<Home />} />
             <Route path="/documentsearch" element={<DocumentSearch />} />
             <Route path="/teams" element={<TeamsPage />} />
-            <Route path="/template" element={<Template />} />
+            <Route path="/edit" element={<Editor />} />
           </Route>
 
           <Route 
