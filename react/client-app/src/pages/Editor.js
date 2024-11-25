@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { fsDb, auth } from "../firebase/firebase";
+import { dbFs, auth } from "../firebase/firebase";
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const TextEditor = () => {
@@ -34,7 +34,7 @@ const TextEditor = () => {
 
     try {
       // Add a new document to the 'documents' collection
-      const docRef = await addDoc(collection(fsDb, 'documents'), {
+      const docRef = await addDoc(collection(dbFs, 'documents'), {
         title: title,
         content: content,
         createdAt: serverTimestamp(),

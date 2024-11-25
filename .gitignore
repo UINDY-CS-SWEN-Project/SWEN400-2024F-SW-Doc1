@@ -1,3 +1,6 @@
+node_modules
+.npm
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
