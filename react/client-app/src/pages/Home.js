@@ -2,9 +2,11 @@ import React from 'react';
 import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
+
 const Home = () => {
   const navigate = useNavigate();
   const auth = getAuth();
+
 
   const handleLogout = async () => {
     try {
@@ -14,6 +16,7 @@ const Home = () => {
       console.error('Logout error:', error);
     }
   };
+
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -40,14 +43,21 @@ const Home = () => {
           Go to Template
         </button>
         <button
-          onClick={() => navigate('/edit')}
-          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded"
+          onClick={() => navigate('/search')}
+          className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-6 rounded"
         >
-          Go to Document Editor
+          Go to Search
+        </button>
+        <button
+          onClick={() => navigate('/edit')}
+          className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded"
+        >
+          Create New Document
         </button>
       </div>
     </div>
   );
 };
+
 
 export default Home;
