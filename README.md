@@ -1,71 +1,38 @@
-# Web: ReactJS + Nginx + Flask + MySQL
-A docker container environment for ReactJS, Nginx, Flask, and MySQL
+# Features that have been implemented
+- Register
+- Login 
+- Logout
+- Document Editor
+- Template Edior
+- Docucment Search
+- Doucment Lists
 
-## Docker environment
-Backend: Flask 
-Backend-Storage: MySQL
-Proxy: Nginx
-Frontend: ReactJS
+# Libraries that are used
+- Firebase
+- Axios
+- React-quill
+- React-Switch
+- React-router-dom
 
-Project structure:
-```
-.
-├── clean-all.sh
-├── clean-start.sh
-├── compose.yaml
-├── flask
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   └── app
-|       └── server.py
-├── nginx
-│   ├── nginx.conf
-│   ├── index.html
-│   └── Dockerfile
-├── mysql
-│   ├── Dockerfile
-│   └── init.sql
-│ 
-└── react
-    ├── client-app (app folder)
-    ├── package.json
-    └── Dockerfile
-```
+# To run our application 
+To start our application run,  
+`./clean-start.sh`
 
-The compose file defines an application with three services `web`, `backend` and `db`.
-When deploying the application, docker compose maps port 80 of the web service container to port 80 of the host as specified in the file.
-Make sure port 80 on the host is not being used by another container, otherwise the port should be changed.
+Go to   
+[Our Website](http://localhost:3000/home)
+# To use our application
 
-## Deploy with docker compose
+- First you can sign in using a google account or regisiter using a manual email address
+- Next you can click creat a doucment
+- After creating a document to your liking you can give it a title and press save
+- Go to document search to see a list of your doucments and also search for your doucment
+- Next you can go to teams to create a team and add members
+- You can remove members or remove your team from the list of teams.
 
-```
-$ docker compose up -d
-Creating network "nginx-flask-mongo_default" with the default driver
-Pulling mongo (mongo:)...
-latest: Pulling from library/mongo
-423ae2b273f4: Pull complete
-...
-...
-Status: Downloaded newer image for nginx:latest
-Creating nginx-flask-mongo_mongo_1 ... done
-Creating nginx-flask-mongo_backend_1 ... done
-Creating nginx-flask-mongo_web_1     ... done
+# How our program is structered
 
-```
+- Our program is using react for the front end use of the software
+- We use firebase as the database for the docments and also to handle our register, login, and logout.
 
-## Expected result
-
-Listing containers must show three containers running and the port mapping as below:
-```
-
-```
-
-After the application starts, navigate to `http://localhost:8080` in your web browser or run:
-```
-
-```
-
-Stop and remove the containers
-```
-
-```
+# Data formats
+- We stored our data is Google's firebase. All logins, teams, templates and documents are stored in Firebase. 
