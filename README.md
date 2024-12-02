@@ -13,6 +13,7 @@
 - React-quill
 - React-Switch
 - React-router-dom
+- Selenium
 
 # To run our application 
 To start our application run,  
