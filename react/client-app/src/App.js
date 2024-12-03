@@ -10,7 +10,7 @@ import TextEditor from './pages/TextEditor';
 import PrivateRoutes from './utils/PrivateRoutes';
 import { useAuth } from './contexts/authContext';
 import { Navigate } from 'react-router-dom';
-import Editor from './pages/Editor';
+import Template from './pages/Template';
 
 function App() {
   return (
@@ -43,7 +43,7 @@ function AppRoutes() {
             <Route path="/search" element={<DocumentSearch />} />
             <Route path="/teams" element={<TeamsPage />} />
             <Route path="/edit" element={<TextEditor />} /> {/* Create new document */}
-            <Route path="/edit" element={<Editor />} />
+            <Route path="/template" element={<Template/>} />
           </Route>
 
 
