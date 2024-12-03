@@ -36,4 +36,4 @@ Go to
 - We use firebase as the database for the docments and also to handle our register, login, and logout.
 
 # Data formats
-- We stored our data is Google's firebase. All logins, teams, templates and documents are stored in Firebase. 
+- We stored our data is Google's firebase. All logins, teams, templates and documents are stored in Firebase. Firebase uses JSON objects that are stored in the cloud. There is no table or records like SQL.
