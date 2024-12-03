@@ -109,39 +109,30 @@ const TextEditor = () => {
             try {
                 const templatesRef = collection(dbFs, "templates");
                 const q = query(templatesRef, where("createdBy", "==", auth.currentUser.uid));
-                
+        
                 const unsubscribe = onSnapshot(q, (snapshot) => {
-                    const fetchedTemplates = snapshot.docs.map(doc => {
+                    const fetchedTemplates = snapshot.docs.map((doc) => {
                         const data = doc.data();
-                        // Ensure content is parseable
                         try {
-                            // Attempt to parse content if it's a string
-                            if (typeof data.content === 'string') {
-                                const parsedContent = JSON.parse(data.content);
-                                return {
-                                    id: doc.id,
-                                    ...data,
-                                    content: parsedContent
-                                };
-                            }
-                            return {
-                                id: doc.id,
-                                ...data
-                            };
+                            const content = typeof data.content === "string"
+                                ? JSON.parse(data.content) // Parse JSON string
+                                : data.content;
+                            return { id: doc.id, ...data, content };
                         } catch (error) {
                             console.error(`Error parsing template ${doc.id}:`, error);
                             return null;
                         }
-                    }).filter(template => template !== null); // Remove any templates that failed to parse
-
+                    }).filter((template) => template !== null); // Filter invalid templates
+        
                     setTemplates(fetchedTemplates);
                 });
-
+        
                 return () => unsubscribe();
             } catch (error) {
                 console.error("Error fetching templates:", error);
             }
         };
+        
 
         fetchTemplates();
 
